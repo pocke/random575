@@ -2,6 +2,7 @@ module Random575
   class MainApp < Ovto::App
     class State < Ovto::State
       item :nonce, default: 0
+      item :format, default: [5, 7, 5]
     end
 
     class Actions < Ovto::Actions
@@ -17,14 +18,33 @@ module Random575
             o 'text', 'Random 575'
             o 'small', ' - Get 575 randomly'
           end
-          o Components::RandomPoem, nonce: state.nonce
-          o 'button', { onclick: handle_reload }, 'reload'
+
+          o Components::RandomPoem, nonce: state.nonce, format: state.format
+
+          o 'hr'
+
+          o 'label' do
+            o 'text', "Select format"
+            o 'select', { onchange: handle_select_format } do
+              o 'option', { value: '575' }, '575'
+              o 'option', { value: '57577' }, '57577'
+              o 'option', { value: '7775' }, '7775'
+            end
+          end
+          o 'button', { type: 'button', onclick: handle_reload }, 'reload'
         end
       end
 
       private def handle_reload
         -> () do
           actions.dispatch(state: { nonce: rand })
+        end
+      end
+
+      private def handle_select_format
+        -> (ev) do
+          fmt = ev.target.value.chars.map(&:to_i)
+          actions.dispatch(state: { format: fmt })
         end
       end
     end

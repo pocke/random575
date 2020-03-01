@@ -1,14 +1,14 @@
 module Random575
   module Components
     class RandomPoem < Ovto::PureComponent
-      def render(nonce:)
+      def render(nonce:, format:)
         o 'div' do
-          o 'text', gen
+          o 'text', gen(format: format)
         end
       end
 
-      private def gen
-        Random575.generate(format: [5, 7, 5, 7, 7]).join(' ')
+      private def gen(format:)
+        Random575.generate(format: format).join(' ')
       end
     end
   end
