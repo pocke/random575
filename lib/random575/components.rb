@@ -1,14 +1,24 @@
 module Random575
   module Components
-    class RandomPoem < Ovto::PureComponent
-      def render(nonce:, format:)
+    class RandomPoem < Ovto::Component
+      def render(poem:, format:)
         o 'div' do
-          o 'text', gen(format: format)
+          o 'text', poem
         end
       end
+    end
 
-      private def gen(format:)
-        Random575.generate(format: format).join(' ')
+    class ShareLink < Ovto::Component
+      def render(text:, link_text: "Share to Twitter", url: Native(`location.href`))
+        o 'a.twitter-share-link', { target: '_blank', href: build_url(url: url, text: text) }, link_text
+      end
+
+      private def build_url(url:, text:)
+        "https://twitter.com/share?url=" + encode(url) + "&text=" + encode(text)
+      end
+
+      private def encode(text)
+        `encodeURIComponent(text)`
       end
     end
   end

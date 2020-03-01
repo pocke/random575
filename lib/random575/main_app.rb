@@ -1,8 +1,9 @@
 module Random575
   class MainApp < Ovto::App
     class State < Ovto::State
-      item :nonce, default: 0
-      item :format, default: [5, 7, 5]
+      default_format = [5, 7, 5]
+      item :poem, default: Random575.generate(format: default_format).join(' ')
+      item :format, default: default_format
     end
 
     class Actions < Ovto::Actions
@@ -19,7 +20,7 @@ module Random575
             o 'small', ' - Get 575 randomly'
           end
 
-          o Components::RandomPoem, nonce: state.nonce, format: state.format
+          o Components::RandomPoem, poem: state.poem, format: state.format
 
           o 'hr'
 
@@ -36,6 +37,10 @@ module Random575
 
           o 'hr'
 
+          o Components::ShareLink, text: state.poem
+
+          o 'hr'
+
           o 'footer' do
             o 'a', { href: 'https://github.com/pocke/random575' }, 'GitHub Repository'
           end
@@ -44,7 +49,8 @@ module Random575
 
       private def handle_reload
         -> () do
-          actions.dispatch(state: { nonce: rand })
+          poem = Random575.generate(format: state.format).join(' ')
+          actions.dispatch(state: { poem: poem })
         end
       end
 
@@ -52,6 +58,7 @@ module Random575
         -> (ev) do
           fmt = ev.target.value.chars.map(&:to_i)
           actions.dispatch(state: { format: fmt })
+          handle_reload.call
         end
       end
     end
