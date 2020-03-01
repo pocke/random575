@@ -24,6 +24,7 @@ module Random575
     end
   end
 
+  # TODO: Add more sources (Note: The license should be public domain!)
   def self.__source
     {
       # From https://github.com/nyoronjp/Ogura_Hyakunin_Isshu.csv/blob/master/%E5%B0%8F%E5%80%89%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96.csv

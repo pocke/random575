@@ -31,7 +31,14 @@ module Random575
               o 'option', { value: '7775' }, '7775'
             end
           end
+          o 'br'
           o 'button', { type: 'button', onclick: handle_reload }, 'reload'
+
+          o 'hr'
+
+          o 'footer' do
+            o 'a', { href: 'https://github.com/pocke/random575' }, 'GitHub Repository'
+          end
         end
       end
 
