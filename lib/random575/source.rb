@@ -1,7 +1,30 @@
 module Random575
   Source = Struct.new(:format, :poems, keyword_init: true)
 
+  def self.generate(format:)
+    format.map do |length|
+      source[:ogura_hyakunin_isshu][length].sample
+    end
+  end
+
   def self.source
+    @source ||= begin
+      s = __source
+      result = {}
+      s.each do |name, src|
+        result[name] = {}.tap do |hash|
+          src.format.each.with_index do |length, idx|
+            src.poems.each do |poem|
+              (hash[length] ||= []) << poem[idx]
+            end
+          end
+        end
+      end
+      result
+    end
+  end
+
+  def self.__source
     {
       # From https://github.com/nyoronjp/Ogura_Hyakunin_Isshu.csv/blob/master/%E5%B0%8F%E5%80%89%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96.csv
       ogura_hyakunin_isshu: Source.new(format: [5, 7, 5, 7, 7], poems: [
